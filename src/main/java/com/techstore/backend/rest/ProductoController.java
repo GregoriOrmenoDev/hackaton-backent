@@ -1,6 +1,6 @@
 package com.techstore.backend.rest;
 
-import com.techstore.backend.model.Producto;     // ADAPTAR: importa tu entidad
+import com.techstore.backend.model.student;     // ADAPTAR: importa tu entidad
 import com.techstore.backend.service.ProductoService; // ADAPTAR: importa tu service
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,30 +31,30 @@ public class ProductoController {
 
     @Operation(summary = "Listar activos")
     @GetMapping
-    public List<Producto> listar() {               // ADAPTAR: List<Libro>
+    public List<student> listar() {               // ADAPTAR: List<Libro>
         return productoService.listar();
     }
 
     @Operation(summary = "Listar por estado: ?estado=true/false")
     @GetMapping("/estado")
-    public List<Producto> listarPorEstado(@RequestParam(required = false) Boolean estado) {
+    public List<student> listarPorEstado(@RequestParam(required = false) Boolean estado) {
         return productoService.listarPorEstado(estado);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> buscarPorId(@PathVariable Integer id) { // ADAPTAR: <Libro>
+    public ResponseEntity<student> buscarPorId(@PathVariable Integer id) { // ADAPTAR: <Libro>
         return productoService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Producto> crear(@RequestBody Producto producto) { // ADAPTAR: Libro
+    public ResponseEntity<student> crear(@RequestBody student producto) { // ADAPTAR: Libro
         return ResponseEntity.ok(productoService.guardar(producto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Producto> actualizar(@PathVariable Integer id, @RequestBody Producto producto) {
+    public ResponseEntity<student> actualizar(@PathVariable Integer id, @RequestBody student producto) {
         return productoService.buscarPorId(id).map(e -> {
             producto.setIdProducto(id); // ADAPTAR: setIdLibro(id), etc.
             return ResponseEntity.ok(productoService.guardar(producto));

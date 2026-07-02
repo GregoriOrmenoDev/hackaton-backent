@@ -1,6 +1,6 @@
 package com.techstore.backend.repository;
 
-import com.techstore.backend.model.Producto;  // ADAPTAR: importa tu nueva entidad
+import com.techstore.backend.model.student;  // ADAPTAR: importa tu nueva entidad
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -13,11 +13,11 @@ import java.util.List;
 //      Ejemplo: existsByTituloIgnoreCase, existsByCodigoIgnoreCase
 // =====================================================================
 @Repository
-public interface ProductoRepository extends JpaRepository<Producto, Integer> { // ADAPTAR: <Libro, Integer>
+public interface ProductoRepository extends JpaRepository<student, Integer> { // ADAPTAR: <Libro, Integer>
 
-    List<Producto> findByEstadoTrue();              // No cambiar
+    List<student> findByEstadoTrue();              // No cambiar
 
-    List<Producto> findByEstado(Boolean estado);    // No cambiar
+    List<student> findByEstado(Boolean estado);    // No cambiar
 
     // ADAPTAR: Cambia "Nombre" por el campo unico de tu entidad
     // Ejemplo: existsByTituloIgnoreCase, existsByCodigoIgnoreCase
