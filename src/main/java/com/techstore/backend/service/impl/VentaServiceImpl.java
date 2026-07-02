@@ -1,6 +1,5 @@
 package com.techstore.backend.service.impl;
 
-import com.techstore.backend.dto.DetalleVentaDTO;
 import com.techstore.backend.dto.VentaRequestDTO;
 import com.techstore.backend.model.*;
 import com.techstore.backend.repository.*;
@@ -9,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +17,8 @@ import java.util.Optional;
 public class VentaServiceImpl implements VentaService {
 
     private final VentaRepository ventaRepository;
-    private final ClienteRepository clienteRepository;
-    private final UsuarioRepository usuarioRepository;
     private final ProductoRepository productoRepository;
+    private final CareerRepository careerRepository;
 
     @Override
     public List<Venta> listar() {
@@ -34,51 +30,24 @@ public class VentaServiceImpl implements VentaService {
         return ventaRepository.findById(id);
     }
 
-    // @Transactional: si algo falla, se revierte todo (atomicidad)
     @Override
     @Transactional
     public Venta registrarVenta(VentaRequestDTO request) {
+        Producto estudiante = productoRepository.findById(request.getStudentId())
+                .orElseThrow(() -> new RuntimeException("Estudiante no encontrado: " + request.getStudentId()));
 
-        Cliente cliente = clienteRepository.findById(request.getIdCliente())
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado: " + request.getIdCliente()));
+        Career carrera = careerRepository.findById(request.getCareerId())
+                .orElseThrow(() -> new RuntimeException("Carrera no encontrada: " + request.getCareerId()));
 
-        Usuario usuario = usuarioRepository.findById(request.getIdUsuario())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + request.getIdUsuario()));
+        Venta matricula = new Venta();
+        matricula.setEstudiante(estudiante);
+        matricula.setCarrera(carrera);
+        matricula.setVenueName(request.getVenueName());
+        matricula.setPromoter(request.getPromoter());
+        matricula.setTotal(request.getPrice());
+        matricula.setEstado(true);
+        matricula.setCreatedAt(LocalDateTime.now());
 
-        Venta venta = new Venta();
-        venta.setCliente(cliente);
-        venta.setUsuario(usuario);
-        venta.setFecha(LocalDateTime.now());
-        venta.setTotal(BigDecimal.ZERO);
-
-        List<DetalleVenta> detalles = new ArrayList<>();
-        BigDecimal total = BigDecimal.ZERO;
-
-        for (DetalleVentaDTO item : request.getDetalles()) {
-
-            Producto producto = productoRepository.findById(item.getIdProducto())
-                    .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + item.getIdProducto()));
-
-            if (producto.getStock() < item.getCantidad()) {
-                throw new RuntimeException("Stock insuficiente para '"
-                        + producto.getNombre() + "'. Disponible: " + producto.getStock());
-            }
-
-            producto.setStock(producto.getStock() - item.getCantidad());
-            productoRepository.save(producto);
-
-            DetalleVenta detalle = new DetalleVenta();
-            detalle.setVenta(venta);
-            detalle.setProducto(producto);
-            detalle.setCantidad(item.getCantidad());
-            detalle.setPrecioUnitario(producto.getPrecio());
-
-            total = total.add(producto.getPrecio().multiply(new BigDecimal(item.getCantidad())));
-            detalles.add(detalle);
-        }
-
-        venta.setTotal(total);
-        venta.setDetalles(detalles);
-        return ventaRepository.save(venta);
+        return ventaRepository.save(matricula);
     }
 }

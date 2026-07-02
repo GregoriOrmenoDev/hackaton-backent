@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/ventas")
+@RequestMapping("/api/matriculas")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
-@Tag(name = "Ventas", description = "Registro de ventas (transaccional)")
+@Tag(name = "Matriculas", description = "Registro de matriculas")
 public class VentaController {
 
     private final VentaService ventaService;
 
-    @Operation(summary = "Listar todas las ventas")
+    @Operation(summary = "Listar todas las matriculas")
     @GetMapping
     public List<Venta> listar() {
         return ventaService.listar();
@@ -33,8 +33,8 @@ public class VentaController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Body: { "idCliente": 1, "idUsuario": 1, "detalles": [{"idProducto": 1, "cantidad": 2}] }
-    @Operation(summary = "Registrar nueva venta")
+    // Body: { "studentId":1, "careerId":1, "venueName":"Sede Central", "promoter":"Ana", "price":1500.00 }
+    @Operation(summary = "Registrar nueva matricula")
     @PostMapping
     public ResponseEntity<?> registrar(@RequestBody VentaRequestDTO request) {
         try {

@@ -4,37 +4,46 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
-// ============================================================
-// ENTIDAD: Venta  ->  tabla VENTAS  (TABLA TRANSACCIONAL)
-// Es la cabecera. Tiene una lista de DetalleVenta (los items).
-// ============================================================
 @Data
 @Entity
-@Table(name = "VENTAS")
+@Table(name = "enrollment")
 public class Venta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_venta")
+    @Column(name = "enrollment_id")
     private Integer idVenta;
 
-    @Column(name = "fecha", nullable = false)
-    private LocalDateTime fecha;
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private Producto estudiante;
 
     @ManyToOne
-    @JoinColumn(name = "id_cliente", nullable = false)
-    private Cliente cliente;
+    @JoinColumn(name = "career_id", nullable = false)
+    private Career carrera;
 
-    @ManyToOne
-    @JoinColumn(name = "id_usuario", nullable = false)
-    private Usuario usuario;
+    @Column(name = "venue_name", nullable = false, length = 200)
+    private String venueName;
 
-    @Column(name = "total", nullable = false, precision = 10, scale = 2)
+    @Column(name = "promoter", length = 200)
+    private String promoter;
+
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal total;
 
-    // cascade = ALL: al guardar la venta, guarda los detalles automaticamente
-    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetalleVenta> detalles;
+    @Column(name = "state", nullable = false)
+    private Boolean estado = true;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    @Column(name = "restored_at")
+    private LocalDateTime restoredAt;
 }

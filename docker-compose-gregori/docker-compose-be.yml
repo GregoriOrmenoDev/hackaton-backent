@@ -9,7 +9,7 @@ services:
     environment:
       # ADAPTAR: Cambia la IP por la IP privada de tu EC2 de base de datos
       # Para local usa el nombre del contenedor: hackaton-sqlserver
-      - SPRING_DATASOURCE_URL=jdbc:sqlserver://hackaton-sqlserver:1433;databaseName=TechStore;encrypt=true;trustServerCertificate=true
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://hackaton-sqlserver:1433;databaseName=Matriculas;encrypt=true;trustServerCertificate=true
       - SPRING_DATASOURCE_USERNAME=sa
       - SPRING_DATASOURCE_PASSWORD=TechStore_2026!
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.microsoft.sqlserver.jdbc.SQLServerDriver

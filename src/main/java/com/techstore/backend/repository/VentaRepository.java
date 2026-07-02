@@ -7,5 +7,6 @@ import java.util.List;
 
 @Repository
 public interface VentaRepository extends JpaRepository<Venta, Integer> {
-    List<Venta> findByClienteIdCliente(Integer idCliente);
+    List<Venta> findByEstado(Boolean estado);
+    List<Venta> findByEstudianteIdProducto(Integer studentId);
 }
