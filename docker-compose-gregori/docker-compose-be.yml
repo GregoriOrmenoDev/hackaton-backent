@@ -1,0 +1,32 @@
+name: hackaton
+
+services:
+  backend:
+    image: gregoriormenosanchez/hackaton-backend:latest
+    container_name: hackaton-backend
+    ports:
+      - "8080:8080"
+    environment:
+      # ADAPTAR: Cambia la IP por la IP privada de tu EC2 de base de datos
+      # Para local usa el nombre del contenedor: hackaton-sqlserver
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://hackaton-sqlserver:1433;databaseName=TechStore;encrypt=true;trustServerCertificate=true
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=TechStore_2026!
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.microsoft.sqlserver.jdbc.SQLServerDriver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+    networks:
+      - hackaton-network
+
+networks:
+  hackaton-network:
+    external: true
+
+# ── LOCAL ────────────────────────────────────────────────────────────────────
+# Levantar:  docker compose -f docker-compose-be.yml up -d
+# Bajar:     docker compose -f docker-compose-be.yml down
+# Logs:      docker logs hackaton-backend -f
+#
+# ── EC2 BACKEND ──────────────────────────────────────────────────────────────
+# 1. docker network create hackaton-network
+# 2. Cambiar hackaton-sqlserver por IP_PRIVADA_EC2_BD
+# 3. docker compose -f docker-compose-be.yml up -d

@@ -1,0 +1,29 @@
+name: hackaton
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: hackaton-sqlserver
+    ports:
+      - "1433:1433"
+    environment:
+      # ADAPTAR: Cambia la password si te dan otro caso
+      SA_PASSWORD: "TechStore_2026!"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - hackaton-network
+
+volumes:
+  sqlserver_data:
+
+networks:
+  hackaton-network:
+    external: true
+
+# Levantar:   docker compose -f docker-compose-db.yml up -d
+# Bajar:      docker compose -f docker-compose-db.yml down
+# Borrar BD:  docker compose -f docker-compose-db.yml down -v
+# Conectar SSMS: localhost,1433 / sa / TechStore_2026!
